@@ -57,3 +57,4 @@ function HasTwoSameDigitsInARow(potentialPassword) {
 
   return uniqueDigitsInPotentialPassword.some(digit => potentialPasswordAsArray.lastIndexOf(digit) - potentialPasswordAsArray.indexOf(digit) == 1);
 
+}
