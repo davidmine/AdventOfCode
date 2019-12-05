@@ -23,17 +23,19 @@ function CalculateRange(stringInput) {
   return range;
 }
 
+// this fuction takes in a range, creates a small list of possible passwords, and filters them based on duplicates
 function GeneratePotentialPasswords(range) {
-  var potentialPasswords = NumbersInRangeWithoutDecrementingDigits(range.low, range.high); // generate the passwords that have non-decrementing digits
+  var potentialPasswords = NumbersInRangeWithoutDecrementingDigits(range); // generate the passwords that have non-decrementing digits
   console.log(potentialPasswords);
   potentialPasswords = potentialPasswords.filter(password => HasTwoSameDigitsInARow(password)); // filter out the ones that don't have two same digits in a row
   return potentialPasswords;
 }
 
-function NumbersInRangeWithoutDecrementingDigits(lowNumber, highNumber) {
-  var validNumber = GenerateInitialNonDerementingNumber(lowNumber);
+// This function takes in a range of numbers and will generate all numbers between them where successive digits do not decrease
+function NumbersInRangeWithoutDecrementingDigits(range) {
+  var validNumber = GenerateInitialNonDerementingNumber(range.low);
   var generatedPasswords = [];
-  while (validNumber <= highNumber){
+  while (validNumber <= range.high){
 
     var baseNumberAsString = (Remove9sFromEndOfNumber(validNumber) + 1).toString();
     
@@ -51,9 +53,10 @@ function NumbersInRangeWithoutDecrementingDigits(lowNumber, highNumber) {
   return generatedPasswords;
 }
 
-function GenerateInitialNonDerementingNumber(num) {
+// this function takes in the low range and returns the first valid number. I can't use the parent function because it assumes invalid numbers end in "9" (for the sake of speed)
+function GenerateInitialNonDerementingNumber(lowRange) {
 
-  var numAsString = num.toString();
+  var numAsString = lowRange.toString();
   var indexOfFirstDecrementDigit = 0;
 
   // find the index where things go wrong. If none, nothing will happen
