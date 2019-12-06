@@ -1,28 +1,37 @@
 
+interface State {
+  puzzleInput : string[];
+  input : string;
+  index : number;
+}
 
 interface Command {
-  (instruction : Instruction, puzzleInput : string[], input : string ) : string[];
+  (params : CommandParams ) : State;
 }
 
-interface Execute {
-  (puzzleInput : string[]) : string[];
+interface CommandParams {
+  instruction : Instruction;
+  state : State;
 }
-
 
 class Instruction {
   opCode : OpCode;
   parameters : Parameter[];
-  execute : Execute;
-  input : string;
+  execute : (params : State) => State;
 
-  constructor(opCode : OpCode, rawParameters : string[], command : Command, input : string){
+  constructor(opCode : OpCode, rawParameters : string[], command : Command){
     this.opCode = opCode;
     var modes = this.opCode.raw.reverse().substr(2).rightPad(3, "0");
     this.parameters = rawParameters.map((value, index) => new Parameter(modes[index].toNum(), value.toNum(), index));
-    this.input = input;
 
-    this.execute = function (puzzleInput : string[]) {
-      return command(this, puzzleInput, input);
+    this.execute = function (params : State) {
+      
+      var commandParams : CommandParams = {
+        instruction: this,
+        state: params
+      };
+
+      return command(commandParams);
     }
   }
 }
@@ -49,4 +58,4 @@ class OpCode {
   }
 }
 
-export {Instruction, Parameter, OpCode, Command};
+export {Instruction, OpCode, Parameter, Command, State, CommandParams};
