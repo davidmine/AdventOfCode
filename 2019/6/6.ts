@@ -2,7 +2,7 @@ console.log("-------------------------");
 console.log("code time");
 console.log("-------------------------");
 
-import "./6.Prototypes";
+//import "./6.Prototypes";
 //import {  } from "./6.Classes";
 
 var puzzleInput = ["KDZ)KYY",
