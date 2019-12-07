@@ -5,7 +5,7 @@ interface State {
   index : number;
 }
 
-interface Command {
+interface CommandFunction {
   (params : CommandParams ) : State;
 }
 
@@ -19,7 +19,7 @@ class Instruction {
   parameters : Parameter[];
   execute : (params : State) => State;
 
-  constructor(opCode : OpCode, rawParameters : string[], command : Command){
+  constructor(opCode : OpCode, rawParameters : string[], command : CommandFunction) {
     this.opCode = opCode;
     var modes = this.opCode.raw.reverse().substr(2).rightPad(3, "0");
     this.parameters = rawParameters.map((value, index) => new Parameter(modes[index].toNum(), value.toNum(), index));
@@ -58,4 +58,9 @@ class OpCode {
   }
 }
 
-export {Instruction, OpCode, Parameter, Command, State, CommandParams};
+enum Mode {
+  Position,
+  Literal
+}
+
+export {Instruction, OpCode, State, CommandParams, Mode};
